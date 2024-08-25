@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript">
+        document.onreadystatechange = function (ev) {
+            if (document.readyState === "complete") {
+                console.warn("define custom element");
+                customElements.define(
+                    "my-paragraph",
+                    class extends HTMLElement {
+                        constructor() {
+                            super();
+                            let template = document.getElementById("custom-paragraph");
+                            let templateContent = template.content;
+
+                            const shadowRoot = this.attachShadow({ mode: "open" });
+                            shadowRoot.appendChild(templateContent.cloneNode(true));
+                        }
+                    }
+                )
+
+                let template = document.getElementById("custom-paragraph");
+                let templateContent = template.content;
+                document.body.appendChild(templateContent);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <template id="custom-paragraph">
+        <style>
+            p {
+                color: white;
+                background-color: #666;
+                padding: 5px;
+            }
+        </style>
+        <p><slot name="my-text">My default text</slot></p>
+    </template>
+
+    <my-paragraph>
+        <span slot="my-text">Let's have some different text!</span>
+    </my-paragraph>
+</body>
+
+</html>
